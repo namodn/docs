@@ -1,11 +1,19 @@
 changelog for cliff.namodn.com
 ==============================
 
+04-29-2003 16:18 Rob
+
+	* Set up penemo and MRTG on admin.namodn.com
+	  Set up DB and some basic PHP scripts to start
+	  a Namodn client admin system ( linked from  admin
+	  site ).
+	  	
 03-17-2003 11:04 Rob
 	* Added the ip_conntrack_ftp module to /etc/modules so
 	  that incoming NAT sessions (should) always work.
 
 03-05-2003 21:11 Rob
+
 	* Added /etc/cron.daily/apt-get_upgrade, a shell script
 	  that runs apt-get update and upgrade every night to
 	  keep Cliff up-to-date.
