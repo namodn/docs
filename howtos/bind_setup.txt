@@ -1,0 +1,10 @@
+# add to main config
+vi /etc/bind/named.conf
+
+# copy anyhosting to sample config
+# modify accordingly
+cp /var/cache/bind/named/anyhosting.com /var/cache/bind/named/$DOMAIN
+vi /var/cache/bind/named/$DOMAIN
+
+# restart named
+pkill -HUP named
