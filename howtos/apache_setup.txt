@@ -1,0 +1,8 @@
+cd /var/www
+
+# add to DOMAINS.list - this is for webalizer
+vi DOMAINS.list
+
+# use mkskel.sh 
+
+mkskel.sh domain
