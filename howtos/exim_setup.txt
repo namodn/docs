@@ -1,11 +1,13 @@
 # add user to local_domains in /etc/exim/exim.conf
+co -l /etc/exim/exim.conf
 vi /etc/exim/exim.conf
+ci -u /etc/exim/exim.conf
 
-# IMPORTANT - if you don't want every user to 
-# get email for this domain, do this :
-#
-# add domain to /etc/exim-aliases/domains
+# add to local domain list
+co -l /etc/exim-aliases/domains
 vi /etc/exim-aliases/domains
+ci -u /etc/exim-aliases/domains
 
 # create domain aliases in /etc/exim-aliases/
-vi /etc/exim-aliases/domain.com-aliases
+vi /etc/exim-aliases/$DOMAIN-aliases
+ci -u /etc/exim-aliases/$DOMAIN-aliases

@@ -1,10 +1,13 @@
 # add to main config
+co -l /etc/bind/named.conf
 vi /etc/bind/named.conf
+ci -u /etc/bind/named.conf
 
 # copy anyhosting to sample config
 # modify accordingly
-cp /var/cache/bind/named/anyhosting.com /var/cache/bind/named/$DOMAIN
-vi /var/cache/bind/named/$DOMAIN
+cp /var/cache/bind/anyhosting.com /var/cache/named/$DOMAIN
+vi /var/cache/bind/$DOMAIN
+ci -u /var/cache/bind/$DOMAIN
 
 # restart named
 pkill -HUP named

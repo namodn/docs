@@ -1,11 +1,18 @@
-cd /var/www
-
 # add to DOMAINS.list - this is for webalizer
-vi DOMAINS.list
+co -l /var/www/DOMAINS.list
+vi /var/www/DOMAINS.list
+ci -u /var/www/DOMAINS.list
+
+# add to vhost config
+co -l /etc/apache/vhosts.conf
+vi /etc/apache/vhosts.conf
+ci -u /etc/apache/vhosts.conf
 
 # use mkskel.sh 
-mkskel.sh domain
+pushd /var/www
+namodn-mkskel-www.sh $DOMAIN
+popd
 
 # give them a cheezy index
-vi domain/htdocs/index.html
+touch /var/www/$DOMAIN/htdocs/index.html
 
