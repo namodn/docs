@@ -1,6 +1,10 @@
 changelog for cliff.namodn.com
 ==============================
 
+03-03-2003 10:36 Rob
+
+	* Added "screen", for all your virtual virtual terminal needs.
+
 03-03-2003 9:57 Rob
 
 	* Put this changelog into CVS, added scripts to automate
