@@ -1,0 +1,173 @@
+changelog for cliff.namodn.com
+==============================
+
+03-03-2003 1:34 Rob
+
+	* Fixed Apache-SSL config, copied /etc/apache-ssl/httpd.conf to
+	  /etc/apache-ssl/httpd.conf-orig, and copied over claire's config
+	  to /etc/apache-ssl/httpd.conf-claire
+
+	  Had to read in the VirtualHosts from the old config, and also
+	  made some changes so that permissions for things like ExecCGI
+	  outside of cgi-bin are set per-vhost, not globally ( did this
+	  for iaminsane.com and mail.namodn.com )
+	  
+  	  Installed perl-suid for OpenWebmail 
+
+03-01-2003 1:34 Rob
+
+	* Re-added deekoo.net 
+	  Also, reformatted old changelog entries to be GNU Changelog style
+
+2-28-2003 11:07 Nick
+
+	* Installed vim, because nvi was driving me nuts. Argh!
+	  Driving me nuts! It updated some packages, including
+	  mkinitrd, and wanted to updated it's conf file, but I
+	  said not to. The package maintainers version is there
+	  as: /etc/mkinitrd/mkinitrd.conf.dpkg-dist 
+
+	  It looks fine, but I didn't wanna take any chances for
+	  now.
+
+
+02-27-2003 21:26 Rob
+
+	* Cliff is installed and up on 63.150.15.11, made him the
+	  master DNS server and got rid of Apache warnings ( claire
+	  had some CNAMEs, it made some things point back to 209.0.100.49,
+	  but cvs.sourcemage.org, which we don't control, is going there
+	  too, so it didn't work out for some reason ).
+
+02-27-2003 04:51 Rob
+
+	* installed portfwd-0.26rc6.tar.gz from http://portfwd.sf.net on
+	  Claire in preperation for server move
+
+02-27-2003 04:13 Rob
+
+	* syncing cliff before move w/ Rsync, explanation of syntax :
+  
+  	  #rsync --delete --archive --compress --rsh=ssh /localdir cliff:/remotedir
+  	  #
+  	  # rsync options used :
+  	  # --delete 	this removes files on Cliff that don't exist on Claire
+  	  # --archive	makes sure symlinks, perms etc. are the same
+  	  # --compress	compresses transfered bits with Gzip
+  	  # --rsh		RSH replacement, in this case SSH
+  	
+  	  the actual commands used ( run from Claire, because Cliff allows root
+  	  logins via SSH and Claire doesn't, I don't want to restart SSH on Claire from
+  	  remote ), this was used in "claire:/root/finalsync.sh" :
+  	
+  	  # system/users
+  	  rsync --archive --compress --rsh=ssh /etc/passwd cliff:/etc/
+  	  rsync --archive --compress --rsh=ssh /etc/shadow cliff:/etc/
+  	  rsync --delete --archive --compress --rsh=ssh /home cliff:/
+  	
+  	  # web
+  	  rsync --delete --archive --compress --rsh=ssh /var/www cliff:/var/
+  	  rsync --delete --archive --compress --rsh=ssh /usr/lib/cgi-bin cliff:/usr/lib/-bin
+  	
+  	  # mail
+  	  rsync --delete --archive --compress --rsh=ssh /etc/aliases cliff:/etc/
+  	  rsync --delete --archive --compress --rsh=ssh /etc/exim.conf cliff:/etc/exim/
+  	  rsync --delete --archive --compress --rsh=ssh /etc/exim-aliases cliff:/etc/
+  	  rsync --delete --archive --compress --rsh=ssh /var/mail cliff:/var/
+  	  rsync --delete --archive --compress --rsh=ssh /var/spool/neomail cliff:/var/spool/
+    	  rsync --delete --archive --compress --rsh=ssh /var/spool/minimalist cliff:/var/spool/
+  	  rsync --delete --archive --compress --rsh=ssh /var/spool/iaminsane.com cliff:/var/spool/
+  	
+	  # cvs
+	  rsync --delete --archive --compress --rsh=ssh /var/cvs cliff:/var
+	
+12-08-2002 19:36 Rob
+	
+	  made sure partitions on 
+	  recreated the RAID with a new /etc/raidtab
+	  mkraid /dev/md[0-3] && mke2fs -j /dev/md[0-3]
+	  added ext3,scsi_mod,sd_mod, raid1 and md to /etc/modules
+	  added ext3,scsi_mod,sd_mod, raid1 and md to /etc/mkinitrd/modules.conf
+	  changed ROOT=probe to ROOT=/dev/md0 in /etc/mkinitrd/mkinitrd.conf
+	  mkinitrd -o /boot/initrd.img-2.4.18-686 /lib/modules/linux-2.4.18-686
+	  changed /etc/lilo.conf to boot off md0 not sda2
+	  mkswap /dev/sdb1
+	  changed /etc/fstab to use two swap partitions 
+	  changed /etc/fstab to use /dev/md[0-3] instead of /dev/sda[2-6]
+	  rebooted off raid
+	  made home partition mirror ( mkraid /dev/md4 && mke2fs -j /dev/md4 )
+	  modified /etc/fstab to use /dev/md4 as home
+	  reboot, all is well
+	  resync'd namodn data according to : /root/server_move_changelog.txt
+	
+12-03-2002 04:20 Rob
+	
+	* d'oh! we're going to have to destroy these filesystems to get
+	  the RAID 1 going.
+	  first, i umounted /home ( /dev/sda7 )
+	  mounted /dev/sda7 /mnt/root
+	  mkdir /mnt/root/home
+	  mv /mnt/root/* /mnt/root/home
+	  made a list of stuff to copy in /tmp/copy.txt
+	  find `cat tmp/copy.txt` | cpio -pm /mnt/root/
+	  chroot /mnt/root
+	  edited /etc/lilo.conf, made /dev/sda7 the root partition
+	  ran lilo ( no errors )
+	
+12-03-2002 03:20 Rob
+	
+	* copied all the claire:/etc/{passwd.*,shadow.*} files to cliff:/etc/
+	
+12-03-2002 03:20 Rob
+	
+	* created journal bits on all filesystems, turned off periodic
+	  fscking - tune2fs -j -c0 -i0 /dev/sda{2,3,5,6,7}
+	  modified /etc/fstab to use ext3 not ext2
+	
+12-03-2002 01:23 Rob
+
+	* moved all dns records to /var/cache/bin/orig ( so all 
+	  secondary zones would load from claire ), all secondary 
+	  zones loaded ok.
+
+	  copied claire:/etc/cron.daily/apache* to cliff:/etc/cron.daily 
+	  ( the old deb package provided these, and they used 
+	  /etc/apache*/cron.conf as a config file to run [ for example ] 
+	  webalizer and any other processing scripts when the logs
+	  were rolled. It's not supplied anymore, I guess we'll
+	  have to figure something better out in the long run )
+
+12-02-2002 19:01 Rob
+
+	* crap. was wrong about the whole exim/root thing.
+	  reverted /etc/exim.conf to the claire version, needs to run
+	  as root for the delivery process.
+	  edited /etc/cron.d/exim, made it run as root instead of mail
+
+12-02-2002 18:52 Rob
+
+	* copied claire:/etc/webalizer.conf to cliff:/etc/webalizer.conf
+	  changed refs in webalizer.conf from "claire" to "cliff"
+	  ( this is just for the default server, which we don't
+	  use, not really a big deal.. ALL of our hosts are vhosts )
+	  had to clean out the webalizer history files so the daily script
+	  will run :
+	  rm `find /home/ -name "webalizer.current"`
+	  rm `find /var/www -name "webalizer.current"`
+
+	  this is due to the upgrade from potato/webalizer to woody/webalizer
+
+12-02-2002 18:40 Rob
+
+	* changed /etc/exim/exim.conf so exim doesn't run as root
+	  this is good from a security standpoint, and also because
+  	  /etc/cron.d/exim wasn't working ( this runs through the 
+  	  queue, very important! )
+	  I also had to chown -R /var/spool/exim
+	  just tested w/ Mozilla Mail 1.0.1, I can send mail OK through cliff.
+
+12-02-2002 18:15 Rob
+
+	* copied /etc/bind/named.conf to /etc/bind/named.conf_GOOD
+	  made /etc/bind.named.conf slave to 209.0.100.49
+	  named.conf_GOOD needs to be copied back when cliff goes into service

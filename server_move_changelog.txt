@@ -1,0 +1,74 @@
+/* 
+*
+* changelog for claire->cliff move
+*
+* started       : 12/01/2002 by Rob
+* last modified : 12/02/2002 by Rob
+*
+* note - every file that existed on cliff before a copy was moved to [file].orig
+* , except if it more than one file, like in /etc/bind for example, in which 
+* case all pre-existing files were moved to a directory like : /etc/bind/orig/ 
+*
+* p.s. - we no longer need a special exim dpkg, woody's exim has smtp
+* auth support by default! hurray!
+* 
+*/
+
+system/users
+--
+copied claire:/etc/{passwd,shadow} to cliff:/etc/
+copied claire:/etc/group to cliff:/etc/group
+copied claire:/home to cliff:/home
+--
+
+web
+--
+installed apache, apache-ssl on cliff
+copied claire:/etc/apache/ to cliff:/etc/apache/
+!( problems copying apache-ssl config file, they've changed the apache
+   ssl module from apache-ssl to mod_ssl it seems. I left it alone for now )
+installed webalizer
+copied claire:/etc/webalizer.conf to cliff:/etc/webalizer.conf
+had to clean out webalizer history due to potato->woody webalizer upgrade :
+	rm `find /home/ -name "webalizer.current"`
+	rm `find /var/www -name "webalizer.current"`
+copied claire:/usr/local/sbin/webalizer_run to cliff:/usr/local/sbin/
+mkdir cliff:/usr/local/etc
+copied claire:/usr/local/etc/webalizer-run.conf to cliff:/usr/local/etc/
+copied claire:/var/spool/neomail cliff:/var/spool/neomail
+--
+
+mail
+--
+( nick installed/set up exim )
+installed uw-imapd
+installed ipopd
+installed sslwrap ( for imap,smtp,pop )
+installed minimalist
+installed mailman
+copied claire:/etc/exim.conf to cliff:/etc/exim/
+copied claire:/etc/exim-aliases to cliff:/etc/exim-aliases
+copied claire:/etc/aliases to cliff:/etc/aliases
+copied claire:/var/mail to cliff:/var/mail
+copied claire:/etc/minimalist.conf cliff:/etc/minimalist.conf
+copied claire:/etc/mailman cliff:/etc/mailman
+cliff:mkdir /usr/lib/exim.bin
+cliff:ln -s /usr/local/sbin/pms /usr/lib/exim.bin
+copied claire:/var/spool/minimalist cliff:/var/spool/minimalist
+copied claire:/var/spool/iaminsane cliff:/var/spool/iaminsane
+copied claire:/usr/local/sbin/pms to cliff:/usr/local/sbin/
+installed libmailtools-perl for Mail::Header ( req'd by PMS )
+copied claire:/usr/local/etc/minimalist-questionart.conf cliff:/usr/local/etc
+--
+
+dns
+--
+copied claire:/etc/bind to cliff:/etc/bind
+copied claire:/var/cache/bind to cliff:/var/cache/bind
+--
+
+cvs
+--
+installed cvs ( enabled pserver )
+copied claire:/var/cvs to cliff:/var/cvs
+--
