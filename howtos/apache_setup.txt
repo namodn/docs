@@ -4,5 +4,23 @@ cd /var/www
 vi DOMAINS.list
 
 # use mkskel.sh 
-
 mkskel.sh domain
+
+# FIXME 
+mv domain/webalizer domain/htdocs/webalizer
+
+# give them a cheezy index
+vi domain/htdocs/index.html
+
+# OpenWebmail setup 
+cd domain/cgi-bin/
+cp -rp ../../mail.castleconsulting.com/cgi-bin/openwebmail/ .
+
+# change "castleconsulting.com" to "domain"
+vi openwebmail/openwebmail-prefs.pl openwebmail/openwebmail.pl openwebmail/spellcheck.pl openwebmail/vacation.pl
+
+cd ../htdocs
+mkdir mail
+cp -rp /var/www/mail.castleconsulting.com/htdocs/data mail/
+cp /var/www/mail.castleconsulting.com/htdocs/index.cgi mail/
+chmod 4555 mail/index.cgi
