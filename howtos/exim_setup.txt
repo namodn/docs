@@ -9,5 +9,5 @@ vi /etc/exim-aliases/domains
 ci -u /etc/exim-aliases/domains
 
 # create domain aliases in /etc/exim-aliases/
-vi /etc/exim-aliases/$DOMAIN-aliases
-ci -u /etc/exim-aliases/$DOMAIN-aliases
+vi /etc/exim-aliases/$DOMAIN.aliases
+ci -u /etc/exim-aliases/$DOMAIN.aliases
