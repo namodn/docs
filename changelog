@@ -1,6 +1,11 @@
 changelog for cliff.namodn.com
 ==============================
 
+03-05-2003 21:11 Rob
+	* Added /etc/cron.daily/apt-get_upgrade, a shell script
+	  that runs apt-get update and upgrade every night to
+	  keep Cliff up-to-date.
+
 03-03-2003 10:39 Rob
 
 	* Added "admin.namodn.com" to Namodn's DNS record.
