@@ -1,7 +1,13 @@
 changelog for cliff.namodn.com
 ==============================
 
-03-03-2003 1:34 Rob
+03-03-2003 9:57 Rob
+
+	* Put this changelog into CVS, added scripts to automate
+	  checkout to a passwd-protected admin.namodn.com site 
+	  ( just created ).
+
+03-03-2003 9:00 Rob
 
 	* Fixed Apache-SSL config, copied /etc/apache-ssl/httpd.conf to
 	  /etc/apache-ssl/httpd.conf-orig, and copied over claire's config
